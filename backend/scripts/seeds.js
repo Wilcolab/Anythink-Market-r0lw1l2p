@@ -6,7 +6,7 @@ var crypto = require("crypto");
 var jwt = require("jsonwebtoken");
 var secret = "your_secret_key_here"; // Clave secreta
 
-mongoose.connect("mongodb://localhost:27017/tu_basededatos", {
+mongoose.connect("mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
