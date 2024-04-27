@@ -4,13 +4,7 @@ var uniqueValidator = require("mongoose-unique-validator");
 var slug = require("slug");
 var crypto = require("crypto");
 var jwt = require("jsonwebtoken");
-var secret = "your_secret_key_here"; // Clave secreta
-
-mongoose.connect("mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+var secret = require("../config").secret;
 
 // Modelo de usuario
 var UserSchema = new mongoose.Schema(
