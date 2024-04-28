@@ -11,27 +11,6 @@ mongoose.connect('mongodb://localhost/anythink-market', {
   useUnifiedTopology: true,
 });
 
-async function cleanDatabase() {
-  try {
-    // Eliminar todos los documentos de las colecciones relevantes
-    await User.deleteMany({});
-    await Item.deleteMany({});
-    await Comment.deleteMany({});
-    
-    console.log('Base de datos limpia con éxito.');
-  } catch (error) {
-    console.error('Error al limpiar la base de datos:', error);
-  }
-}
-
-// Llama a la función cleanDatabase antes de sembrar la base de datos
-async function seedAndClean() {
-  await cleanDatabase();
-  await seedDatabase();
-}
-
-seedAndClean();
-
 // Modelo de usuario
 /*var UserSchema = new mongoose.Schema(
   {
