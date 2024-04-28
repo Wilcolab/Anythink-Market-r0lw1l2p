@@ -41,8 +41,9 @@ UserSchema.plugin(uniqueValidator, { message: "is already taken." });
 
 // Agregar la función deleteMany al esquema del usuario
 UserSchema.statics.deleteMany = function (conditions, callback) {
-  return this.deleteMany(conditions, callback);
+  return this.model("User").deleteMany(conditions, callback);
 };
+
 UserSchema.methods.validPassword = function(password) {
   var hash = crypto
     .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
