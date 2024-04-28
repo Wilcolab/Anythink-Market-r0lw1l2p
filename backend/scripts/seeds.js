@@ -4,7 +4,7 @@ var uniqueValidator = require("mongoose-unique-validator");
 var User = require("./backend/models/User"); // Importa el modelo de usuario
 var Item = require("./backend/backend/models/Item"); // Importa el modelo de producto
 var Comment = require("./backend/models/Comment"); // Importa el modelo de comentario
-/backend/models/User.js
+
 // Establece la conexión a la base de datos
 mongoose.connect("mongodb://localhost/anythink-market", {
   useNewUrlParser: true,
