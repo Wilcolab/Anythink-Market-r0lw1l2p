@@ -17,6 +17,7 @@ async function cleanDatabase() {
     await User.deleteMany({});
     await Item.deleteMany({});
     await Comment.deleteMany({});
+    
     console.log('Base de datos limpia con éxito.');
   } catch (error) {
     console.error('Error al limpiar la base de datos:', error);
