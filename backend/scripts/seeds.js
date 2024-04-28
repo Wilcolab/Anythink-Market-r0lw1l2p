@@ -32,7 +32,7 @@ async function seedAndClean() {
 seedAndClean();
 
 // Modelo de usuario
-var UserSchema = new mongoose.Schema(
+/*var UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -65,7 +65,9 @@ var UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
 UserSchema.plugin(uniqueValidator, { message: "is already taken" });
+*/
 
 UserSchema.methods.validPassword = function (password) {
   var hash = crypto
@@ -155,7 +157,7 @@ UserSchema.methods.isFollowing = function (id) {
   });
 };
 
-mongoose.model("User", UserSchema);
+//mongoose.model("User", UserSchema);
 
 // Modelo de producto
 var ItemSchema = new mongoose.Schema(
