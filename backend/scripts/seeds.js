@@ -1,12 +1,12 @@
 //TODO: seeds script should come here, so we'll be able to put some data in our local env
-var mongoose = require("mongoose");
-var uniqueValidator = require("mongoose-unique-validator");
-var User = require("../models/User.js"); // Importa el modelo de usuario
-var Item = require("../models/Item.js"); // Importa el modelo de producto
-var Comment = require("../models/Comment.js"); // Importa el modelo de comentario
+var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
+var User = require('../models/User.js'); // Importa el modelo de usuario
+var Item = require('../models/Item.js'); // Importa el modelo de producto
+var Comment = require('../models/Comment.js'); // Importa el modelo de comentario
 
 // Establece la conexión a la base de datos
-mongoose.connect("mongodb://localhost/anythink-market", {
+mongoose.connect('mongodb://localhost/anythink-market', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -17,9 +17,9 @@ async function cleanDatabase() {
     await User.deleteMany({});
     await Item.deleteMany({});
     await Comment.deleteMany({});
-    console.log("Base de datos limpia con éxito.");
+    console.log('Base de datos limpia con éxito.');
   } catch (error) {
-    console.error("Error al limpiar la base de datos:", error);
+    console.error('Error al limpiar la base de datos:', error);
   }
 }
 
@@ -38,27 +38,27 @@ seedAndClean();
       type: String,
       lowercase: true,
       unique: true,
-      required: [true, "can't be blank"],
-      match: [/^[a-zA-Z0-9]+$/, "is invalid"],
+      required: [true, 'can't be blank'],
+      match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
       index: true,
     },
     email: {
       type: String,
       lowercase: true,
       unique: true,
-      required: [true, "can't be blank"],
-      match: [/\S+@\S+\.\S+/, "is invalid"],
+      required: [true, 'can't be blank'],
+      match: [/\S+@\S+\.\S+/, 'is invalid'],
       index: true,
     },
     bio: String,
     image: String,
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ['user', 'admin'],
+      default: 'user',
     },
-    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     hash: String,
     salt: String,
   },
@@ -66,21 +66,21 @@ seedAndClean();
 );
 
 
-UserSchema.plugin(uniqueValidator, { message: "is already taken" });
+UserSchema.plugin(uniqueValidator, { message: 'is already taken' });
 */
 
 UserSchema.methods.validPassword = function (password) {
   var hash = crypto
-    .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
-    .toString("hex");
+    .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
+    .toString('hex');
   return this.hash === hash;
 };
 
 UserSchema.methods.setPassword = function (password) {
-  this.salt = crypto.randomBytes(16).toString("hex");
+  this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto
-    .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
-    .toString("hex");
+    .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
+    .toString('hex');
 };
 
 UserSchema.methods.generateJWT = function () {
@@ -114,7 +114,7 @@ UserSchema.methods.toProfileJSONFor = function (user) {
     username: this.username,
     bio: this.bio,
     image:
-      this.image || "https://static.productionready.io/images/smiley-cyrus.jpg",
+      this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
     following: user ? user.isFollowing(this._id) : false,
   };
 };
@@ -157,26 +157,26 @@ UserSchema.methods.isFollowing = function (id) {
   });
 };
 
-//mongoose.model("User", UserSchema);
+//mongoose.model('User', UserSchema);
 
 // Modelo de producto
 var ItemSchema = new mongoose.Schema(
   {
     slug: { type: String, lowercase: true, unique: true },
-    title: { type: String, required: [true, "can't be blank"] },
-    description: { type: String, required: [true, "can't be blank"] },
+    title: { type: String, required: [true, 'can't be blank'] },
+    description: { type: String, required: [true, 'can't be blank'] },
     image: String,
     favoritesCount: { type: Number, default: 0 },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
     tagList: [{ type: String }],
-    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   { timestamps: true }
 );
 
-ItemSchema.plugin(uniqueValidator, { message: "is already taken" });
+ItemSchema.plugin(uniqueValidator, { message: 'is already taken' });
 
-ItemSchema.pre("validate", function (next) {
+ItemSchema.pre('validate', function (next) {
   if (!this.slug) {
     this.slugify();
   }
@@ -187,7 +187,7 @@ ItemSchema.pre("validate", function (next) {
 ItemSchema.methods.slugify = function () {
   this.slug =
     slug(this.title) +
-    "-" +
+    '-' +
     ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
 };
 
@@ -216,14 +216,14 @@ ItemSchema.methods.toJSONFor = function (user) {
   };
 };
 
-mongoose.model("Item", ItemSchema);
+mongoose.model('Item', ItemSchema);
 
 // Modelo de comentario
 var CommentSchema = new mongoose.Schema(
   {
     body: String,
-    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    item: { type: mongoose.Schema.Types.ObjectId, ref: "Item" },
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    item: { type: mongoose.Schema.Types.ObjectId, ref: 'Item' },
   },
   { timestamps: true }
 );
@@ -238,12 +238,12 @@ CommentSchema.methods.toJSONFor = function (user) {
   };
 };
 
-mongoose.model("Comment", CommentSchema);
+mongoose.model('Comment', CommentSchema);
 
 // Sembrar la base de datos con datos aleatorios
-var User = mongoose.model("User");
-var Item = mongoose.model("Item");
-var Comment = mongoose.model("Comment");
+var User = mongoose.model('User');
+var Item = mongoose.model('Item');
+var Comment = mongoose.model('Comment');
 
 async function seedDatabase() {
   try {
@@ -251,14 +251,14 @@ async function seedDatabase() {
     var users = [];
     for (var i = 0; i < 100; i++) {
       var userData = {
-        username: "user" + i,
-        email: "user" + i + "@example.com",
-        bio: "User " + i + " bio",
-        image: "https://example.com/image.png",
-        role: "user",
+        username: 'user' + i,
+        email: 'user' + i + '@example.com',
+        bio: 'User ' + i + ' bio',
+        image: 'https://example.com/image.png',
+        role: 'user',
       };
       var user = new User(userData);
-      await user.setPassword("password"); // Definir contraseña para todos los usuarios
+      await user.setPassword('password'); // Definir contraseña para todos los usuarios
       await user.save();
       users.push(user);
     }
@@ -267,10 +267,10 @@ async function seedDatabase() {
     var products = [];
     for (var i = 0; i < 100; i++) {
       var productData = {
-        title: "Product " + i,
-        description: "Description of product " + i,
-        image: "https://example.com/image.png",
-        tagList: ["tag1", "tag2"],
+        title: 'Product ' + i,
+        description: 'Description of product ' + i,
+        image: 'https://example.com/image.png',
+        tagList: ['tag1', 'tag2'],
         seller: users[i % 100]._id, // Asignar vendedor de manera circular
       };
       var product = new Item(productData);
@@ -282,7 +282,7 @@ async function seedDatabase() {
     var comments = [];
     for (var i = 0; i < 100; i++) {
       var commentData = {
-        body: "Comment " + i,
+        body: 'Comment ' + i,
         seller: users[i % 100]._id, // Asignar vendedor de manera circular
         item: products[i % 100]._id, // Asignar producto de manera circular
       };
@@ -291,9 +291,9 @@ async function seedDatabase() {
       comments.push(comment);
     }
 
-    console.log("Base de datos sembrada con éxito.");
+    console.log('Base de datos sembrada con éxito.');
   } catch (error) {
-    console.error("Error al sembrar la base de datos:", error);
+    console.error('Error al sembrar la base de datos:', error);
   } finally {
     mongoose.disconnect();
   }
