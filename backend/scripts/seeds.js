@@ -163,8 +163,8 @@ UserSchema.methods.isFollowing = function (id) {
 var ItemSchema = new mongoose.Schema(
   {
     slug: { type: String, lowercase: true, unique: true },
-    title: { type: String, required: [true, 'can't be blank'] },
-    description: { type: String, required: [true, 'can't be blank'] },
+    title: { type: String, required: [true, "can't be blank"] },
+    description: { type: String, required: [true, "can't be blank"] },
     image: String,
     favoritesCount: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
